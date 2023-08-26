@@ -43,9 +43,9 @@ public:
         }
     };
 
-    constexpr std::size_t m() const { return M; };
-    constexpr std::size_t n() const { return N; };
-    constexpr std::size_t size() const { return M*N; };
+    static constexpr std::size_t m() { return M; };
+    static constexpr std::size_t n() { return N; };
+    static constexpr std::size_t size() { return M*N; };
 
     Type& access(std::size_t iRow, std::size_t iColumn)
     {
@@ -243,7 +243,21 @@ public:
         return std::ranges::equal(lhs.mat,mat);
     }
 
-    Matrix<Type,M,N> operator-(const Matrix<Type,M,N>& lhs)
+    Matrix<Type,M,N> operator+(const Matrix<Type,M,1>& vect)
+    {
+        Matrix<Type,M,N> matResult{};
+        for(std::size_t x{0} ; x < M ; x++)
+        {
+            for(std::size_t y{0} ; y < N ; y++)
+            {
+                matResult.access(x,y) = static_cast<Type>(at(x,y) + vect.at(x,0));
+            }
+        }
+        return matResult;
+    }
+
+    template<typename T>
+    Matrix<Type,M,N> operator-(const Matrix<T,M,N>& lhs) requires std::integral<T> || std::floating_point<T>
     {
         Matrix<Type,M,N> matResult{};
         for(std::size_t x{0} ; x < M ; x++)
@@ -271,13 +285,13 @@ public:
     }
 
 
-    template<std::size_t T>
-    Matrix<Type,M,T> operator*(Matrix<Type,N,T> mat1)
+    template<typename T, std::size_t O>
+    Matrix<T,M,O> operator*(Matrix<T,N,O> mat1) requires std::integral<T> || std::floating_point<T>
     {
-        Matrix<Type,M,T> matrix{};   
+        Matrix<T,M,O> matrix{};   
         for(std::size_t i=0; i< M ;i++)    
         {    
-            for(std::size_t j=0; j<T;j++)    
+            for(std::size_t j=0; j<O;j++)    
             {    
                 matrix.access(i,j)=0;    
                 for(std::size_t k=0; k<N; k++)    

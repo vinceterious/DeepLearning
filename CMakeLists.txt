@@ -22,5 +22,6 @@ file(COPY dataset/winequality-white.csv DESTINATION "${CMAKE_BINARY_DIR}")
 # Exec
 ################################
 add_subdirectory(matrix)
+add_subdirectory(deepneuralnetwork)
 add_executable(main main.cpp )
 target_link_libraries(main matrix)

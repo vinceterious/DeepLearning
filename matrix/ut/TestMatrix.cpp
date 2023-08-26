@@ -302,6 +302,31 @@ TEST(TestMatrix, TestSplit)
     ASSERT_TRUE(expectResult2 == lower);
 }
 
+TEST(TestMatrix, TestAdditionWithVector) 
+{
+    constexpr std::size_t M1{5};
+    using Mat = Matrix<int,M1,M1>;
+    Mat mat1{{ Mat::Row{1,2},  Mat::Row{3,4},  Mat::Row{5,6} }};
+    Mat expectResult{{ 
+        Mat::Row{2,3,1,1,1},  
+        Mat::Row{5,6,2,2,2},  
+        Mat::Row{8,9,3,3,3},
+        Mat::Row{4,4,4,4,4},  
+        Mat::Row{5,5,5,5,5}
+    }};
+
+    using Vector = Matrix<int,M1,1>;
+    Vector vect{{ Mat::Column{
+        1,
+        2,
+        3,
+        4,
+        5
+    }}};
+
+    ASSERT_TRUE(expectResult == (mat1 + vect));
+}
+
 TEST(TestMatrix, TestSolveLinearEquation) 
 {
 
