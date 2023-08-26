@@ -16,7 +16,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 # Dataset example
 ################################
 
-#file(COPY dataset/winequality-white.csv DESTINATION "${CMAKE_BINARY_DIR}")
+file(COPY dataset/winequality-white.csv DESTINATION "${CMAKE_BINARY_DIR}")
 
 ################################
 # Exec

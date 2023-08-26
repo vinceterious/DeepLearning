@@ -32,7 +32,7 @@ public:
     template<class T = Column>
     Matrix(const std::array<T,N>& c) requires (std::is_same<T,Row>::value == false) 
         //Avoid same contructor declaration as above when M=N
-    : mat{}
+        : mat{}
     {
         for(std::size_t i{0} ; i < M ; i++)
         {
@@ -226,6 +226,16 @@ public:
     Type sum() const
     {
         return std::accumulate(mat.cbegin()->cbegin(), mat.cend()->cbegin(),0.0,std::plus<Type>());        
+    }
+
+    template <std::size_t Cut>
+    std::tuple<Matrix<Type,Cut,N>,Matrix<Type,M-Cut,N>> split() const requires (M > Cut)
+    {
+        Matrix<Type,Cut,N> matUpper{};
+        Matrix<Type,M-Cut,N> matLower{};
+        matUpper.copyStartAt(mat.cbegin()->cbegin(),(mat.cbegin() + Cut)->cbegin(), 0,0);
+        matLower.copyStartAt((mat.cbegin() + Cut)->cbegin(),mat.cend()->cbegin(), 0,0);
+        return {matUpper , matLower};        
     }
 
     bool operator==(const Matrix<Type,M,N>& lhs)

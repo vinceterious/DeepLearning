@@ -281,6 +281,27 @@ TEST(TestMatrix, TestOperatorMultiWithDifferentType)
     ASSERT_TRUE(expectResult == mat1 * 2.0);
 }
 
+TEST(TestMatrix, TestSplit) 
+{
+    constexpr std::size_t M1{5};
+    using Mat = Matrix<int,M1,M1>;
+    Mat mat1{{ Mat::Row{1,2},  Mat::Row{3,4},  Mat::Row{5,6} }};
+
+    constexpr std::size_t M2{2};
+    using MatExpect1 = Matrix<int,M2,M1>;
+    MatExpect1 expectResult{{ MatExpect1::Row{1,2},  MatExpect1::Row{3,4}}};
+    
+    constexpr std::size_t M3{3};
+    using MatExpect2 = Matrix<int,M3,M1>;
+    MatExpect2 expectResult2{{ MatExpect2::Row{5,6}}};
+    auto [ upper, lower ] = mat1.split<2>();
+    std::cout << "Mat mat1:\n" << mat1 << "\n";
+    std::cout << "Mat upper:\n" << upper << "\n";
+    std::cout << "Mat lower:\n" << lower << "\n";
+    ASSERT_TRUE(expectResult == upper);
+    ASSERT_TRUE(expectResult2 == lower);
+}
+
 TEST(TestMatrix, TestSolveLinearEquation) 
 {
 
